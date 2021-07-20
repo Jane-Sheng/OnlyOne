@@ -1,7 +1,3 @@
-
-
-
-
 # Python笔记
 
 ## 第2章 变量和简单数据类型
@@ -29,16 +25,6 @@
   >>> chr(100)
   'd'
   ```
-
-- 常见的几种函数：
-
-  ```python
-  ().real //检测负数实部
-  ().imag //检测负数虚部
-  bin()   //将十进制数转换为二进制数
-  ```
-
-
 
 ## 第3章 条件分支与循环
 
@@ -386,9 +372,9 @@ def 函数名 ([参数]):
       i += 1
   ```
 
-### 6.3 自定义函数第一步
+### 6.3 自定义函数第二步
 
-1. 位置参数
+1. 位置参数 positional argument
 
    ```python
    def test1(name, age):
@@ -396,12 +382,14 @@ def 函数名 ([参数]):
    test1('Tom', 11)
    ```
 
-2. 关键字参数
+2. 关键字参数 keyword argument
 
    ```python
    test1(name='John', age=20)
    test1('John', age=20)
    ```
+
+   传递参数时，关键字参数必须放在位置参数后面；且不能重复对同一个参数赋值。
 
 3. 默认值
 
@@ -412,5 +400,52 @@ def 函数名 ([参数]):
    test1(18)
    ```
 
+   默认值参数必须放在非默认值参数后面。
+
 4. 不定长参数*、**
+
+   ```python
+   def watermelon(name, *attributes):
+   		print(name)
+   		print(type(attributes))
+   		description = ''
+   		for get_t in attributes:
+   				description += '' + get_t
+   		print(description)
+   watermelon('西瓜', '甜', '圆形', '绿色')
+   print('--------------------------')
+   watermelon('西瓜', '甜', '圆形', '绿皮', '红瓤', '无籽')
+   ```
+
+   ```
+   西瓜
+   <class 'tuple'>
+    甜 圆形 绿色
+   --------------------------
+   西瓜
+   <class 'tuple'>
+    甜 圆形 绿皮 红瓤 无籽
+   ```
+
+   - 不定长参数前加*、**表示。
+
+   - *用于接收位置参数的剩余值，类型是元组；**用于接收关键字参数的默认值，类型是字典。
+
+   - 在函数定义中，可以有\*没有\*\*，也可以有\*没有\**；当都出现时，**类参数要放在\*类型参数的后面。
+
+   ```python
+   def test1(mame, *other1, **other2):
+     	print(name, other1, other2)
+   test1('kan', 1,2,3,4, a='a')
+   ```
+
+   ```
+   kan (1, 2, 3, 4) {'a': 'a'}
+   ```
+
+   
+
+## 第7章 类
+
+### 7.1 初识类
 
