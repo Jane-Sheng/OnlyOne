@@ -265,8 +265,6 @@
      2
      ```
 
-     
-
 ## 第5章 字典 Dict
 
 ### 5.1 接触字典
@@ -443,9 +441,264 @@ def 函数名 ([参数]):
    kan (1, 2, 3, 4) {'a': 'a'}
    ```
 
-   
-
 ## 第7章 类
 
 ### 7.1 初识类
+
+```python
+class Box():
+  	'''求立方体的类'''
+  	def __init__(self, length1, width1, height1):	# 默认传递类参数额保留函数__init__；self代表实例对象,在实例调用时传递实例对象
+    		self.length = length1
+        self.width = width1
+        self.height = height1
+        
+    def volume(self):	 # 求立方体体积的函数volume
+      	return self.length * self.width * self.height
+      
+my_box = Box(10, 10, 10)
+print(my_box.volume)
+```
+
+### 7.2 属性使用
+
+属性初始化的两种方法
+
+1. 在\_\_init\_\_里直接初始化
+
+   ```python
+   class Box():
+     	'''求立方体的类'''
+     	def __init__(self):	# 默认传递类参数额保留函数__init__
+       		self.length = 0
+           self.width = 0
+           self.height = 0
+           
+       def volume(self):	 # 求立方体体积的函数volume
+         	return self.length * self.width * self.height
+         
+   my_box = Box()
+   my_box.length = 10
+   my_box.width = 10
+   my_box.height = 10
+   print(my_box.volume)
+   ```
+
+   可以通过对象直接访问和修改它的参数（即length width height等）。即，默认公有。
+
+2. 传递参数初始化
+
+   此方式例程见7.1。
+
+   可以通过对象直接新建类定义中没有的新参数，并通过此对象调用。
+
+   ```python
+   my_box.haha = 6
+   print(my_box.haha)
+   ```
+
+### 7.3 类改造问题
+
+继承、重写方法
+
+**继承**inheritance 继承原有类功能的基础上，增加新的功能（属性或方法），形成新的**子类**。被继承的叫**父类**。
+
+```python
+class Box1():	# 定义父类
+  	'''求立方体的类'''
+  	def __init__(self, length1, width1, height1):
+    		self.length = length1
+        self.width = width1
+        self.height = height1
+      
+    def volume(self):	 # 求立方体体积的函数volume
+      	return self.length * self.width * self.height
+      
+      
+class Box2(Box1):	# 继承Box1定义子类Box2
+  	def __init__(self, length1, width1, height1):	 # 此处的属性（参数）至少要包括父类的
+      	super().__init__(length1, width1, height1)	 # 因为父类的构造函数已经被覆盖，故用super()显式地调用父类的构造函数
+    		self.color='white'
+        self.material='paper'
+        self.type='fish'
+      
+    def area(self):
+      	return self.length * self.width * self.height  
+      
+my_box = Box(10, 10, 10)
+print(my_box.volume())
+```
+
+子类的子函数会完全覆盖父类的同名函数。只要函数名相同，即使两者参数不同，也不会出现重载。
+
+在子类的定义中可以显式地调用父类。
+
+### 7.4 私有
+
+欲将**变量**或**函数**变成私有，可在前面加**双下划线**__
+
+```python
+class Box():
+  	'''求立方体的类'''
+  	def __init__(self, length1, width1, height1):
+    		self.length = length1
+        self.width = width1
+        self.height = height1
+      
+    def volume(self):
+      	return self.length * self.width * self.height
+      
+      
+class Box1(Box):
+  	def __init__(self, length1, width1, height1):
+      	super().__init__(length1, width1, height1)
+    		self.__name = 'three cool cats'
+      
+    def volume(self, num=1):
+      	self.__showName()
+      	return self.length * self.width * self.height
+      
+    def __showName(self):
+      	print(self.__name)
+        
+        
+my_box = Box(10, 10, 10)
+my_box1 = Box1(11, 12, 13)
+
+my_box1.__name = 'fff'	# 不能直接访问私有变量，这里实际上是新建了一个新变量
+# my_box1.__showName()  # Error 不能直接调用私有函数
+
+print(my_box.volume())
+print(my_box1.volume())
+```
+
+```
+1000
+three cool cats
+1716
+```
+
+### 7.5 把类放到模块中
+
+为了让类可以共享，把类放入模块中。两个好处：减少代码的重复；便于更新。
+
+假设Box在Box.py文件中，可通过
+
+```python
+from Box import *
+```
+
+来调用它。
+
+### 7.6 类回顾
+
+**动态类**（Dynamic Class） 可以创建实例的类。
+
+**静态类**（Static Class） 不支持实例的类。
+
+定义变量时不需要使用self；也不需要有\_\_init\_\_构造函数。
+
+```python
+class StaticC():
+  	name = 'Tom'				# 类局部变量
+    age = 20
+    address = 'China'
+    call = 28380000
+    
+    def a():	# 没有self参量，不能叫方法，只能叫函数
+      	i = 0
+        i += 1
+        print('第一个函数%d' % (i))
+        
+    def b(add=1):
+      	print('第二个函数%d' % (add))
+        
+   	def c(add=1):
+      	print('第三个函数%d' % (add))
+        return add
+      
+     
+StaticC.c()
+```
+
+静态类可以理解为一个工具类，将一系列的变量和函数封装成了一个工具包，
+
+动态类可以创建实例，实例具有属性和方法。
+
+## 第8章 标准库
+
+### 8.1 python标准库知识
+
+**Python语言标准库**（Stantard Library） 内置了大量的函数，是python解释器的核心功能之一。
+
+打开Python手册（Tutorial）的方法：Python IDLE --> Help --> Python Docs --> The Python Standard Library --> Built-in Functions内置函数、常量、类型、基本类
+
+### 8.2 datetime模块
+
+创建日期和时间
+
+```
+datetime.now()								  获取当天的日期和时间
+datetime.date(t)								获取当天的日期，t为datetime实例参数（下同）
+datetime.time(t)								获取当天的时间
+datetime.ctime(t)								获取“星期,月,日,时,分,秒,年”格式的字符串
+datetime.utcnow()								获取当前的UTC日期和时间（北京是UTC+8）
+datetime.timestamp(t)						获取当天的时间戳（Unix时间戳）
+datetime.fromtimestamp(t_tamp)	根据时间戳返回UTC日期时间；t_tamp为时间戳浮点数
+datetime.combine(date1, time1)	绑定日期、时间，生成新的datetime对象；date1为日期对象，time1为时间对象
+datetime.strptime(dt_str, sf)		根据字符串和指定格式生成新的datetime对象；dt_str为字符串日期时间，sf为指定格式
+datetime.timetuple(t)						把datetime对象所有属性转为时间元组对象
+t.isocalendar()									获取ISO格式的日期（元组格式）
+t.strftime(dt_str_format)				获取自定义格式的日期时间字符串，dt_str_format指定格式
+```
+
+
+
+```python
+from datetime import datetime,date,time
+
+print(datetime.now())		# 返回当天的日期和时间
+today = datetime.now()
+print(datetimr.date(today))		# 返回当天的日期
+print(datetime.time(today))		# 返回当天的时间
+
+print(datetime.ctime(today))	# 返回“星期,月,日,时,分,秒,年”格式的字符串
+print(datetime.utcnow())			# 返回当前的UTC日期和时间
+print(datetime.timestamp(today))	# 返回当天的时间戳
+print(datetime.fromtimestamp(datetime.timestamp(today)))	# 根据时间戳返回 UTC datetime
+
+date1 = date(2018, 2, 12)
+time1 = time(20, 53, 48)
+print(datetime.combine(date1, time1))	 # 绑定日期，时间，生成新的datetime对象
+
+newDatetime = datetime.strptime("12/2/18 20:59", '%d/%m/%y %H:%M')	# 用字符串和指定格式生成新的datetime对象
+print(newDatetime)
+
+for tv in datetime.timetuple(today):
+  	print(tv)
+print(today.isocalendar())	# ISO格式的日期
+print(today.strftime("%Y年%m月%d日 %H:%M:%S %p"))
+```
+
+```
+2019-08-03 14:38:51.615660
+2019-08-03
+14:38:51.635642
+Sat Aug  3 14:38:51 2019
+2019-08-03 06:38:51.679616
+1564814331.635642
+2019-08-03 14:38:51.635642
+2018-02-12 20:59:00
+2019
+8
+3
+14
+38
+51
+5
+215
+-1
+(2019, 31, 6)
+2019年08月03日 14:38:51 PM
+```
 
