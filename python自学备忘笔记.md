@@ -774,5 +774,257 @@ b'6\xd3|q\xe5\x9f\xe0\xf0<\xed'
 
 ### 8.6 sys模块
 
-sys模块提供了跟Python解释器
+sys模块提供了跟Python解释器紧密相关的一些变量和函数。
 
+```python
+>>> import sys	# 以我的MacBook Air(MacOS11)为例
+>>> sys.path
+['', '/Users/shengjie/opt/anaconda3/lib/python38.zip', '/Users/shengjie/opt/anaconda3/lib/python3.8', '/Users/shengjie/opt/anaconda3/lib/python3.8/lib-dynload', '/Users/shengjie/opt/anaconda3/lib/python3.8/site-packages', '/Users/shengjie/opt/anaconda3/lib/python3.8/site-packages/aeosa']
+>>> sys.api_version
+1013
+>>> sys.copyright
+'Copyright (c) 2001-2020 Python Software Foundation.\nAll Rights Reserved.\n\nCopyright (c) 2000 BeOpen.com.\nAll Rights Reserved.\n\nCopyright (c) 1995-2001 Corporation for National Research Initiatives.\nAll Rights Reserved.\n\nCopyright (c) 1991-1995 Stichting Mathematisch Centrum, Amsterdam.\nAll Rights Reserved.'
+>>> sys.prefix
+'/Users/shengjie/opt/anaconda3'
+>>> sys.platform
+'darwin'
+>>> sys.exit()	# 在命令行退出python
+```
+
+### 8.7 time模块
+
+```python
+>>> import time
+>>> time.sleep(5)	 # 休眠模块
+>>> time.clock()
+0.0
+>>> time.strftime('上午%H时：%M分：%S秒')
+'上午10时：27分：29秒'
+>>> time.time()	 # 返回时间戳
+1627266467.595265
+>>> type(time.time())
+<class 'float'>
+
+>>> import datetime
+>>> tt1=datetime.datetime.timestamp(datetime.datetime.now())
+>>> tt1
+1627266660.676132
+>>> type(tt1)
+<class 'float'>	 # 使用datetime模块和time模块返回的时间戳类型相同
+```
+
+### 8.8 再论模块
+
+**模块**：标准库模块、自定义模块（函数模块、主程序模块、类模块）
+
+**包**：将模块组成分类的汇总/集合
+
+引入包的三种方法：
+
+1. 直接将包复制到源目录下
+
+   ```python
+   >>> import sys
+   >>> sys.path
+   ['', '/Users/shengjie/opt/anaconda3/lib/python38.zip', '/Users/shengjie/opt/anaconda3/lib/python3.8', '/Users/shengjie/opt/anaconda3/lib/python3.8/lib-dynload', '/Users/shengjie/opt/anaconda3/lib/python3.8/site-packages', '/Users/shengjie/opt/anaconda3/lib/python3.8/site-packages/aeosa']
+   # 将对应的包复制到路径下
+   >>> exit()
+   
+   >>> import package.Cat.Cat_Main
+   OK
+   Go!
+   ```
+
+2. 将包所在路径添加到path
+
+   可避免复制文件对原路径文件夹的破坏。
+
+   ```python
+   >>> import sys
+   >>> sys.path
+   ['', '/Users/shengjie/opt/anaconda3/lib/python38.zip', '/Users/shengjie/opt/anaconda3/lib/python3.8', '/Users/shengjie/opt/anaconda3/lib/python3.8/lib-dynload', '/Users/shengjie/opt/anaconda3/lib/python3.8/site-packages', '/Users/shengjie/opt/anaconda3/lib/python3.8/site-packages/aeosa']
+   >>> sys.path.append('(你的路径)')
+   ```
+
+3. 修改path的第0号地址为包所在路径
+
+   ```python
+   >>> import sys
+   >>> sys.path[0] = '(你的路径)'
+   ```
+
+### 8.9 窥探标准库源码
+
+## 第9章 异常
+
+### 9.1 程序中的问题
+
+1. 低级错误，代码语法出错
+
+   低级错误指纯语法错误，代码主要在编写、调试阶段就报错。
+
+2. 中级错误，代码存在隐性错误
+
+   隐形错误主要指代码编写存在逻辑错误或缺陷，当程序满足特定数据处理条件时，报错或给出错误答案。（比较致命）
+
+3. 高级错误，软件面对不确定性的异常错误
+
+   高级错误指不确定性的异常错误，主要指软件的代码本身没有问题。所输入的数据也能得到控制或保证，而是在运行过程中环境所带来的不确定性异常。（考验鲁棒性 异常监控）
+
+### 9.2 捕捉异常
+
+1. 基本异常捕捉语句语法
+
+   ```python
+   try:
+   		代码模块1
+   except:
+   		代码模块2
+   ```
+
+   若代码模块1执行中出错，则代码模块1后续代码不再执行，转入except处理。except捕捉异常信息，提示出错信息或处理出错后事项，异常处理结束。
+
+   例：
+
+   ```python
+   def print_D(dic):
+     	i = 0
+       try:
+         	len1 = len(dic)
+           while i < len1:
+             	print(dic.popitem())
+               i += 1
+       except:
+         	print("传递值类型出错，必须为字典型！")
+           
+   print_D({1:'a', 2:'b'})	 # 正常字典对象
+   print_D([1, 2, 3])	 		 # 错误字典对象
+   ```
+
+   ```
+   (2, 'b')
+   (1, 'a')
+   传递值类型出错，必须为字典型！
+   ```
+
+2. 进阶异常捕捉语句语法
+
+   ```python
+   try:
+   		# 主代码块
+   		pass
+   except KeyError as e:
+     	# 如果发生异常，异常时，执行该块
+       pass
+   else:	 # 如果没有异常
+     	# 主代码块执行完，执行该块
+       pass
+   finally:
+     	# 无论异常与否，最终执行该块
+   pass
+   ```
+
+   修改上例；
+
+   ```python
+   def print_D(dic):
+     	i = 0
+       try:
+         	len1 = len(dic)
+           while i < len1:
+             	print(dic.popitem())
+               i += 1
+       except:
+         	print("传递值类型出错，必须为字典型！")
+       else:
+         	print("No Error")
+       finally:
+         	print("Must be executed")
+           
+   print_D({1:'a', 2:'b'})	 # 正常字典对象
+   print_D([1, 2, 3])	 		 # 错误字典对象
+   ```
+
+   一些异常
+
+   ```python
+   Exception					万能异常
+   AttributeError		试图访问一个对象没有的属性，比如foo.x，但是foo没有属性x
+   IOError						输入/输出异常：基本上是无法打开文件
+   ImportError				无法引入模块或包：基本上是路径问题或名称错误
+   IndentationError	语法错误（的子类）：代码没有正确对齐
+   IndexError				下标索引超出序列边界，比如当x只有三个元素，却试图访问x[5]
+   KeyError					试图访问字典里不存在的键
+   KeyboardInterrupt	Ctrl+C被按下
+   NameError					使用一个还未被赋予对象的变量
+   SyntaxError				Python代码非法，代码不能编译（可能是语法错误，写错了）
+   TypeError					传入对象类型与要求的不符合
+   UnboundLocalError	试图访问一个还未被设置的局部变量，基本上是由于另有一个同名的全局变量，导致你以为正在访问它
+   ValueError				传入一个调用者不期望的值，即使值的类型是正确的
+   ```
+
+### 9.3 抛出异常
+
+```python
+>>> i = '1'
+>>> if type(i) != int:
+...			raise TypeError('i类型出错！')
+    
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+TypeError: i类型出错！
+```
+
+```python
+class HelloException(Exception):
+  	def __init__(self.msg):
+      	self.message = msg
+        
+    def __str__(self):
+      	return self.message
+      
+try:
+  	raise HelloException('我的异常')
+except HelloException as e:
+  	print(e)
+```
+
+```
+我的异常
+```
+
+## 第10章 文件处理
+
+### 10.1 文本文件
+
+- 建立文件
+
+  ```python
+  newfile = r'd:\t1.txt'	# 打开文件
+  b_new_file = open(newfile, 'w')	# ‘w’表示只写 如果文件不存在，则新建；若存在，则清空原有内容
+  b_new_file.close()	# 关闭文件
+  print("%s成功建立！" % (newfile))
+  ```
+
+  文件的打开模式：w, r, a（只写，追加方式，append）
+
+  ```python
+  f.tell()	# r模式下，返回当前“光标”所在位置数
+  num = f.read()	# 读光标到末尾的内容（流输入输出）
+  f.seek(2)	 # 移动光标至指定位置
+  ```
+
+- 基本的读写文件
+
+  ```python
+  # 往文件里写内容
+  newfile = r'd:\t1.txt'					# 定义需要建立的文本名称和路径
+  b_new_file = open(newfile, 'w')	# 用open函数建立一个新的文本文件
+  t_n = b_new_file.write('I like python!')	# 用文件对象write()方法写字符串
+  b_new_file.close()							# 用close()方法关闭新建的文件
+  print("往文件里写入%d字节内容" % (t_n))	 # 提示写文本文件内容成功
+  # 往文件里读内容
+  b_new_file = open(newfile, 'r')
+  ```
+
+  
