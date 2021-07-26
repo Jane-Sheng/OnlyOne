@@ -652,8 +652,6 @@ t.isocalendar()									获取ISO格式的日期（元组格式）
 t.strftime(dt_str_format)				获取自定义格式的日期时间字符串，dt_str_format指定格式
 ```
 
-
-
 ```python
 from datetime import datetime,date,time
 
@@ -701,4 +699,80 @@ Sat Aug  3 14:38:51 2019
 (2019, 31, 6)
 2019年08月03日 14:38:51 PM
 ```
+
+### 8.3 math模块
+
+```python
+>>> import math
+>>> math.log2(2)
+1.0
+>>> math.log(9, 3)
+2.0
+>>> math.sin(30)
+-0.9880316240928618
+>>> math.pi
+3.141592653589793
+>>> math.sin(math.pi/2)
+1.0
+>>> math.sqrt(4)
+2.0
+>>> math.fbas(-10)	# 绝对值
+10.0
+>>> math.ceil(0.15)	# 向上取整
+1
+>>> math.floor(0.15)	# 向下取整
+0
+```
+
+### 8.4 random模块
+
+随机函数，用于生成一系列随机数计算均值、正态（高斯）分布、对数正态分布、伽玛（Gamma）分布和贝塔（Beta）分布。
+
+```python
+>>> import random
+>>> random.random()	# 在0-1之间随机产生一个实数（随后不再改变）
+0.7480237362897358
+>>> random.uniform(-10, -1)	 # 在给定[a, b)区间内随机产生一个实数
+-1.6864730982183342
+>>> import math
+>>> math.floor(random.uniform(0,9))	 # 叠加取整函数，在给定[a, b)区间内随机产生一个整数
+0
+>>> random.randint(0, 9)	# 在给定[a, b]区间内随机产生一个整数
+9
+>>> random.choice("abc")	# 在给定的可迭代的区间内随机选择一个元素
+'a'
+>>> random.choice([1, 2, 3])
+2
+>>> random.triangular()
+0.7529027373677091
+>>> random.triangular(0, 10)
+4.473775632796311
+```
+
+### 8.5 os模块
+
+os模块为多操作系统的访问提供了相关功能支持，便于忽略操作系统的区别而使用相同方法。
+
+```python
+>>> import os	 # 以我的MacBook Air(MacOS11)为例
+>>> os.cpu_count()	# cpu个数
+4
+>>> os.curdir	 # 当前所在目录
+'.'
+>>> os.defpath	# 可执行文件的默认搜索路径
+'/bin:/usr/bin'
+>>> os.urandom(10)	# 返回一个随机字符，随机生成一个加密的数字，用于设备加密（此处老师口胡，不清楚）
+b'6\xd3|q\xe5\x9f\xe0\xf0<\xed'
+>>> os.path.abspath(os.curdir)	# 返回给定path规范化的绝对路径
+'/Users/shengjie'
+>>> d = os.path.abspath(os.curdir)
+>>> os.path.dirname(d)	# 返回路径的目录
+'/Users'
+>>> os.path.basename(d)	# 返回路径的最后的文件名
+'shengjie'
+```
+
+### 8.6 sys模块
+
+sys模块提供了跟Python解释器
 
